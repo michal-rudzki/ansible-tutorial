@@ -5,10 +5,20 @@
 
   tasks:
 
-  - name: install apache and php
-    package:
+  - name: [Ubuntu] install apache and php
+    apt:
       name: 
-        - "{{ apache_package }}"
-        - "{{ php_package }}"
+        - apache2
+        - libapache2-mod-php
       state: latest
       update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: [Fedora] install apache and php
+    dnf:
+      name: 
+        - httpd
+        - php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Fedora"
