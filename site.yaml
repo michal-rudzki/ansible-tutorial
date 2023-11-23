@@ -4,64 +4,72 @@
   become: true
 
   pre_tasks:
-  - name: install updates (Fedora)
-    dnf:
-      update_only: yes
-      update_cache: true
-    when: ansible_distribution == "Fedora"
+    - name: install updates (Ubuntu)
+      tags: always
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
 
-  - name: install updates (Ubuntu)
-    apt:
-      upgrade: dist
-      update_cache: true
-    when: ansible_distribution == "Ubuntu"
-
+    - name: install updates (Fedora)
+      tags: always
+      dnf:
+        update_only: yes
+        update_cache: yes
+      when: ansible_distribution == "Fedora"
+          
 
 - hosts: web_servers
   become: true
+  tags: prod, frontend
 
   tasks:
-  - name: (Ubuntu) install apache and php
-    apt:
-      name: 
-        - apache2
-        - libapache2-mod-php
-      state: latest
-    when: ansible_distribution == "Ubuntu"
+    - name: install apache and php (Ubuntu)
+      tags: apache, apache2, ubuntu
+      apt: 
+        name: 
+          - apache2
+          - libapache2-mod-php
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
 
-  - name: (Fedora) install apache and php
-    dnf:
-      name: 
-        - httpd
-        - php
-      state: latest
-    when: ansible_distribution == "Fedora"
+    - name: install apache and php (Fedora)
+      tags: apache, fedora, httpd
+      dnf:
+        name: 
+          - httpd
+          - php
+        state: latest
+        update_cache: yes
+      when: ansible_distribution == "Fedora"
 
 
 - hosts: db_servers
   become: true
-
-  tasks:
-
-  - name: install mariadb package (Fedora)
-    dnf:
-      name: mariadb
-      state: latest
-    when: ansible_distribution == "Fedora"
   
-  - name: install mariadb package (Ubuntu)
-    apt:
-      name: mariadb-server
-      state: latest
-    when: ansible_distribution == "Ubuntu"
+  tasks:
+    - name: mariadb package (Ubuntu)
+      tags: ubuntu, db, mariadb
+      apt:
+        name: mariadb-server
+        state: latest
+      when: ansible_distribution == "Ubuntu"
+
+    - name: mariadb package (Fedora)
+      tags: fedora, db, mariadb
+      dnf:
+        name: mariadb
+        state: latest
+      when: ansible_distribution == "Fedora"
 
 
 - hosts: file_servers
   become: true
-
+  
   tasks:
-
-  - name: install samba package
-    package:
-      name: samba
-      state: latest
+    - name: install samba package
+      tags: samba
+      package:
+        name: samba
+        state: latest
