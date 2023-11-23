@@ -2,10 +2,12 @@ web_servers:
   hosts:
     srv1.mailx.com.pl:
     srv2.mailx.com.pl:
+    srv4.mailx.com.pl:
 
 db_servers:
   hosts:
     srv3.mailx.com.pl:
+    srv4.mailx.com.pl:
 
 file_servers:
   hosts:
