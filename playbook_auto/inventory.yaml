@@ -1,0 +1,15 @@
+ubuntu:
+  hosts:
+    srv1.mailx.com.pl:
+    srv2.mailx.com.pl:
+    srv3.mailx.com.pl:
+  vars:
+    apache_package: apache2
+    php_package: libapache2-mod-php
+
+fedora:
+  hosts:
+    srv4.mailx.com.pl:
+  vars:
+    apache_package: httpd
+    php_package: php
