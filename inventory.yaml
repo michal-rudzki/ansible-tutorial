@@ -12,3 +12,7 @@ db_servers:
 file_servers:
   hosts:
     srv4.mailx.com.pl:
+
+workstations:
+  hosts:
+    vm-jenkins.mailx.com.pl:
