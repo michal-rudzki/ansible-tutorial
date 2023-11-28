@@ -7,15 +7,15 @@
     - name: install updates (Ubuntu)
       tags: always
       apt:
-        upgrade: dist
         update_cache: yes
+      chenged_when: false
       when: ansible_distribution == "Ubuntu"
 
     - name: install updates (Fedora)
       tags: always
       dnf:
-        update_only: yes
         update_cache: yes
+      chenged_when: false
       when: ansible_distribution == "Fedora"
           
 
@@ -23,26 +23,11 @@
   become: true
 
   tasks:
-    - name: create s1m0ne user
-      tags: always
-      user:
-        name: simone
-        groups: root
-
     - name: add ssh key for s1m0ne
       tags: always
       authorized_key:
         user: simone
         key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOBk4F/MnzU7Zj9uNmmvw8F/LhXNcQLqIja/ffxy9NhJ ansible"
-
-    - name: add sudoers file for s1m0ne
-      tags: always
-      copy:
-        src: sudoer_simone
-        dest: /etc/sudoers.d/simone
-        owner: root
-        group: root
-        mode: 0440
           
 
 - hosts: workstations
