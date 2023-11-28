@@ -62,6 +62,32 @@
         update_cache: yes
       when: ansible_distribution == "Fedora"
 
+    - name: start httpd (Fedora)
+      tags: apche, fedora, httpd
+      service:
+        name: httpd
+        state: started
+        enabled: yes
+      when: ansible_distribution == "Fedora"
+
+    - name: change e-mail address for admin
+      tags: apache, fedora, httpd
+      lineinfile:
+        path: /etc/httpd/conf/httpd.conf
+        regexp: '^ServerAdmin'
+        line: ServerAdmin michal@mailx.com.pl
+      when: ansible_distribution == "Fedora"
+      register: my_var
+
+    - name: restart httpd (Fedora)
+      tags: apache, fedora, httpd
+      service:
+        name: httpd
+        state: restarted
+      when: my_var.changed
+
+
+
     - name: copy default html file for site
       tags: apache, apache2, httpd
       copy:
