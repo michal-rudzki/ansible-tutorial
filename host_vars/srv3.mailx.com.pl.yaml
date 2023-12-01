@@ -3,4 +3,6 @@ apache_service: apache2
 php_package_name: libapache2-mod-php
 mariadb_server: mariadb-server
 mariadb_service: mariadb.service
+ssh_users: "michal simone"
+ssh_template_file: sshd_config_ubuntu.j2
 

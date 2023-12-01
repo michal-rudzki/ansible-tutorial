@@ -4,4 +4,6 @@ php_package_name: php
 apache_admin_email: ServerAdmin admin@mailx.com.pl
 mariadb_server: mariadb-server-galera.x86_64 
 mariadb_service: mariadb
+ssh_users: "michal simone"
+ssh_template_file: sshd_config_fedora.j2
 
