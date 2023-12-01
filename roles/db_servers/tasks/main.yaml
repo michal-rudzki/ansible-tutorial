@@ -1,13 +1,13 @@
 - name: mariadb package (Ubuntu)
   tags: ubuntu, db, mariadb
-  apt:
-    name: mariadb-server
+  package:
+    name: "{{ mariadb_server }}"
     state: latest
-  when: ansible_distribution == "Ubuntu"
 
-- name: mariadb package (Fedora)
-  tags: fedora, db, mariadb
-  dnf:
-    name: mariadb
-    state: latest
+- name: start and enable mariadb service
+  tags: mariadb, fedora
+  service:
+    name: "{{ mariadb_service }}"
+    state: started
+    enabled: yes
   when: ansible_distribution == "Fedora"
