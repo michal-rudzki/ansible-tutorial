@@ -1,0 +1,13 @@
+- name: mariadb package (Ubuntu)
+  tags: ubuntu, db, mariadb
+  apt:
+    name: mariadb-server
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: mariadb package (Fedora)
+  tags: fedora, db, mariadb
+  dnf:
+    name: mariadb
+    state: latest
+  when: ansible_distribution == "Fedora"

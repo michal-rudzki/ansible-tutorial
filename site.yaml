@@ -8,132 +8,38 @@
       tags: always
       apt:
         update_cache: yes
-      chenged_when: false
+      changed_when: false
       when: ansible_distribution == "Ubuntu"
 
     - name: install updates (Fedora)
       tags: always
       dnf:
         update_cache: yes
-      chenged_when: false
+      changed_when: false
       when: ansible_distribution == "Fedora"
           
 
 - hosts: all
   become: true
-
-  tasks:
-    - name: add ssh key for s1m0ne
-      tags: always
-      authorized_key:
-        user: simone
-        key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOBk4F/MnzU7Zj9uNmmvw8F/LhXNcQLqIja/ffxy9NhJ ansible"
-          
+  roles:
+    - base
 
 - hosts: workstations
   become: true
-
-  tasks:
-    - name: install unzip
-      package:
-        name: unzip
-
-    - name: install terraform from zip repositorry
-      unarchive:
-        src: https://releases.hashicorp.com/terraform/1.6.4/terraform_1.6.4_linux_amd64.zip
-        dest: /usr/local/bin
-        remote_src: yes
-        mode: 0755
-        owner: root
-        group: root
-
+  roles:
+    - workstations
 
 - hosts: web_servers
   become: true
-  tags: prod, frontend
-
-  tasks:
-    - name: install apache and php (Ubuntu)
-      tags: apache, apache2, ubuntu
-      apt: 
-        name: 
-          - apache2
-          - libapache2-mod-php
-        state: latest
-        update_cache: yes
-      when: ansible_distribution == "Ubuntu"
-
-    - name: install apache and php (Fedora)
-      tags: apache, fedora, httpd
-      dnf:
-        name: 
-          - httpd
-          - php
-        state: latest
-        update_cache: yes
-      when: ansible_distribution == "Fedora"
-
-    - name: start httpd (Fedora)
-      tags: apche, fedora, httpd
-      service:
-        name: httpd
-        state: started
-        enabled: yes
-      when: ansible_distribution == "Fedora"
-
-    - name: change e-mail address for admin
-      tags: apache, fedora, httpd
-      lineinfile:
-        path: /etc/httpd/conf/httpd.conf
-        regexp: '^ServerAdmin'
-        line: ServerAdmin michal@mailx.com.pl
-      when: ansible_distribution == "Fedora"
-      register: my_var
-
-    - name: restart httpd (Fedora)
-      tags: apache, fedora, httpd
-      service:
-        name: httpd
-        state: restarted
-      when: my_var.changed
-
-
-
-    - name: copy default html file for site
-      tags: apache, apache2, httpd
-      copy:
-        src: default_site.html
-        dest: /var/www/html/index.html
-        owner: root
-        group: root
-        mode: 0644
-
+  roles:
+    - web_servers
 
 - hosts: db_servers
   become: true
-  
-  tasks:
-    - name: mariadb package (Ubuntu)
-      tags: ubuntu, db, mariadb
-      apt:
-        name: mariadb-server
-        state: latest
-      when: ansible_distribution == "Ubuntu"
-
-    - name: mariadb package (Fedora)
-      tags: fedora, db, mariadb
-      dnf:
-        name: mariadb
-        state: latest
-      when: ansible_distribution == "Fedora"
-
+  roles:
+    - db_servers
 
 - hosts: file_servers
   become: true
-  
-  tasks:
-    - name: install samba package
-      tags: samba
-      package:
-        name: samba
-        state: latest
+  roles:
+    - file_servers
